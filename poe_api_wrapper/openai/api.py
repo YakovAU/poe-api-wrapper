@@ -194,6 +194,93 @@ async def create_images(request: Request, data: ImagesGenData) -> ORJSONResponse
 @app.api_route("/images/edits", methods=["POST", "OPTIONS"], response_model=None)
 @app.api_route("/v1/images/edits", methods=["POST", "OPTIONS"], response_model=None)
 async def edit_images(request: Request, data: ImagesEditData) -> ORJSONResponse:
+
+@app.api_route("/videos/generations", methods=["POST", "OPTIONS"], response_model=None)
+@app.api_route("/v1/videos/generations", methods=["POST", "OPTIONS"], response_model=None) 
+async def create_video(request: Request, data: VideosGenData) -> ORJSONResponse:
+    """Generate a video based on prompt"""
+    prompt, model, n, duration = data.prompt, data.model, data.n, data.duration
+    
+    if not isinstance(prompt, str):
+        raise HTTPException(detail={"error": {"message": "Invalid prompt.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    if model not in app.state.models:
+        raise HTTPException(detail={"error": {"message": "Invalid model.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    if not isinstance(n, int) or n < 1:
+        raise HTTPException(detail={"error": {"message": "Invalid n value.", "type": "error", "param": None, "code": 400}}, status_code=400)
+        
+    modelData = app.state.models[model]
+    baseModel, tokensLimit, endpoints, premiumModel = modelData["baseModel"], modelData["tokens"], modelData["endpoints"], modelData["premium_model"]
+    
+    if "/v1/videos/generations" not in endpoints:
+        raise HTTPException(detail={"error": {"message": "This model does not support video generation.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    client, subscription = await rotate_token(app.state.tokens)
+    
+    if premiumModel and not subscription:
+        raise HTTPException(detail={"error": {"message": "Premium model requires a subscription.", "type": "error", "param": None, "code": 402}}, status_code=402)
+    
+    response = await video_handler(baseModel, prompt, tokensLimit, duration)
+    
+    urls = []
+    for _ in range(n):
+        async for chunk in client.send_message(bot=response["bot"], message=response["message"]):
+            if chunk.get("state") == "complete":
+                urls.extend([url for url in chunk["text"].split() if url.startswith("https://")])
+                if len(urls) >= n:
+                    break
+    urls = urls[-n:]
+    
+    if len(urls) == 0:
+        raise HTTPException(detail={"error": {"message": f"The provider for {model} sent an invalid response.", "type": "error", "param": None, "code": 500}}, status_code=500)
+
+    return ORJSONResponse({"created": await helpers.__generate_timestamp(), "data": [{"url": url} for url in urls]})
+
+@app.api_route("/videos/edits", methods=["POST", "OPTIONS"], response_model=None)
+@app.api_route("/v1/videos/edits", methods=["POST", "OPTIONS"], response_model=None)
+async def edit_video(request: Request, data: VideosEditData) -> ORJSONResponse:
+    """Edit an existing video based on prompt"""
+    video, prompt, model, n, duration = data.video, data.prompt, data.model, data.n, data.duration
+    
+    if not (isinstance(video, str) and (os.path.exists(video) or video.startswith("http"))):
+        raise HTTPException(detail={"error": {"message": "Invalid video.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    if not isinstance(prompt, str):
+        raise HTTPException(detail={"error": {"message": "Invalid prompt.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    if model not in app.state.models:
+        raise HTTPException(detail={"error": {"message": "Invalid model.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    if not isinstance(n, int) or n < 1:
+        raise HTTPException(detail={"error": {"message": "Invalid n value.", "type": "error", "param": None, "code": 400}}, status_code=400)
+        
+    modelData = app.state.models[model]
+    baseModel, tokensLimit, endpoints, premiumModel = modelData["baseModel"], modelData["tokens"], modelData["endpoints"], modelData["premium_model"]
+    
+    if "/v1/videos/edits" not in endpoints:
+        raise HTTPException(detail={"error": {"message": "This model does not support video editing.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    client, subscription = await rotate_token(app.state.tokens)
+    
+    if premiumModel and not subscription:
+        raise HTTPException(detail={"error": {"message": "Premium model requires a subscription.", "type": "error", "param": None, "code": 402}}, status_code=402)
+    
+    response = await video_edit_handler(baseModel, video, prompt, tokensLimit, duration)
+    
+    urls = []
+    for _ in range(n):
+        async for chunk in client.send_message(bot=response["bot"], message=response["message"]):
+            if chunk.get("state") == "complete":
+                urls.extend([url for url in chunk["text"].split() if url.startswith("https://")])
+                if len(urls) >= n:
+                    break
+    urls = urls[-n:]
+        
+    if len(urls) == 0:
+        raise HTTPException(detail={"error": {"message": f"The provider for {model} sent an invalid response.", "type": "error", "param": None, "code": 500}}, status_code=500)
+
+    return ORJSONResponse({"created": await helpers.__generate_timestamp(), "data": [{"url": url} for url in urls]})
     image, prompt, model, n, size = data.image, data.prompt, data.model, data.n, data.size
     
     if not (isinstance(image, str) and (os.path.exists(image) or image.startswith("http"))):
@@ -248,6 +335,23 @@ async def edit_images(request: Request, data: ImagesEditData) -> ORJSONResponse:
             
     return ORJSONResponse({"created": await helpers.__generate_timestamp(), "data": [{"url": url} for url in urls]})
    
+
+async def video_handler(baseModel: str, prompt: str, tokensLimit: int, duration: int = 10) -> dict:
+    """Handle video generation requests"""
+    try:
+        message = await helpers.__progressive_summarize_text(prompt, min(len(prompt), tokensLimit))
+        return {"bot": baseModel, "message": message}
+    except Exception as e:
+        raise HTTPException(detail={"error": {"message": f"Failed to truncate prompt. Error: {e}", "type": "error", "param": None, "code": 400}}, status_code=400) from e
+
+async def video_edit_handler(baseModel: str, video: str, prompt: str, tokensLimit: int, duration: int = 10) -> dict:
+    """Handle video editing requests"""
+    try:
+        message = f"Edit this video: {video}\nPrompt: {prompt}"
+        message = await helpers.__progressive_summarize_text(message, min(len(message), tokensLimit))
+        return {"bot": baseModel, "message": message}
+    except Exception as e:
+        raise HTTPException(detail={"error": {"message": f"Failed to truncate prompt. Error: {e}", "type": "error", "param": None, "code": 400}}, status_code=400) from e
 
 async def image_handler(baseModel: str, prompt: str, tokensLimit: int) -> dict:
     try:
