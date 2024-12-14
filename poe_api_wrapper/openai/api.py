@@ -194,6 +194,59 @@ async def create_images(request: Request, data: ImagesGenData) -> ORJSONResponse
 @app.api_route("/images/edits", methods=["POST", "OPTIONS"], response_model=None)
 @app.api_route("/v1/images/edits", methods=["POST", "OPTIONS"], response_model=None)
 async def edit_images(request: Request, data: ImagesEditData) -> ORJSONResponse:
+    image, prompt, model, n, size = data.image, data.prompt, data.model, data.n, data.size
+    
+    if not (isinstance(image, str) and (os.path.exists(image) or image.startswith("http"))):
+        raise HTTPException(detail={"error": {"message": "Invalid image.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    if not isinstance(prompt, str):
+        raise HTTPException(detail={"error": {"message": "Invalid prompt.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    if model not in app.state.models:
+        raise HTTPException(detail={"error": {"message": "Invalid model.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    if not isinstance(n, int) or n < 1:
+        raise HTTPException(detail={"error": {"message": "Invalid n value.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    if size == "1024x1024":
+        aspect_ratio = ""
+    elif "sizes" in app.state.models[model] and size in app.state.models[model]["sizes"]:
+        aspect_ratio = app.state.models[model]["sizes"][size]
+    else:
+        raise HTTPException(detail={"error": {"message": f"Invalid size for {model}. Available sizes: {', '.join(app.state.models[model]['sizes']) if 'sizes' in app.state.models[model] else '1024x1024'}", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    modelData = app.state.models[model]
+    baseModel, tokensLimit, endpoints, premiumModel = modelData["baseModel"], modelData["tokens"], modelData["endpoints"], modelData["premium_model"]
+    
+    if "/v1/images/edits" not in endpoints:
+        raise HTTPException(detail={"error": {"message": "This model does not support image editing.", "type": "error", "param": None, "code": 400}}, status_code=400)
+    
+    client, subscription = await rotate_token(app.state.tokens)
+    
+    if premiumModel and not subscription:
+        raise HTTPException(detail={"error": {"message": "Premium model requires a subscription.", "type": "error", "param": None, "code": 402}}, status_code=402)
+    
+    response = await image_handler(baseModel, prompt, tokensLimit)
+    
+    urls = []
+    for _ in range(n):
+        image_generation = await generate_image(client, response, aspect_ratio, [image])
+        urls.extend([url for url in image_generation.split() if url.startswith("https://")])
+        if len(urls) >= n:
+            break
+    urls = urls[-n:]
+        
+    if len(urls) == 0:
+        raise HTTPException(detail={"error": {"message": f"The provider for {model} sent an invalid response.", "type": "error", "param": None, "code": 500}}, status_code=500)
+    
+    async with AsyncClient(http2=True) as fetcher:
+        for url in urls:
+            r = await fetcher.get(url)
+            content_type = r.headers.get("Content-Type", "")
+            if not content_type.startswith("image/"):
+                raise HTTPException(detail={"error": {"message": "The content returned was not an image.", "type": "error", "param": None, "code": 500}}, status_code=500)
+            
+    return ORJSONResponse({"created": await helpers.__generate_timestamp(), "data": [{"url": url} for url in urls]})
 
 @app.api_route("/videos/generations", methods=["POST", "OPTIONS"], response_model=None)
 @app.api_route("/v1/videos/generations", methods=["POST", "OPTIONS"], response_model=None) 
