@@ -460,10 +460,10 @@ async def rotate_token(tokens) -> Tuple[AsyncPoeApi, bool]:
 
 
 if __name__ == "__main__":
-    CommandLineInterface().run(["api:app", "--bind", "127.0.0.1", "--port", "8000"])
+    CommandLineInterface().run(["api:app", "--bind", "127.0.0.1", "--port", "8091"])
     
     
-def start_server(tokens: list, address: str="127.0.0.1", port: str="8000"):
+def start_server(tokens: list, address: str="127.0.0.1", port: str="8091"):
     if not isinstance(tokens, list):
         raise TypeError("Tokens must be a list.")
     if not all(isinstance(token, dict) for token in tokens):
