@@ -460,13 +460,18 @@ async def rotate_token(tokens) -> Tuple[AsyncPoeApi, bool]:
 
 
 if __name__ == "__main__":
-    CommandLineInterface().run(["api:app", "--bind", "127.0.0.1", "--port", "8091"])
+    import os
+    host = os.getenv("HOST", "127.0.0.1")
+    port = os.getenv("PORT", "8091")
+    CommandLineInterface().run(["api:app", "--bind", host, "--port", port])
     
     
-def start_server(tokens: list, address: str="127.0.0.1", port: str="8091"):
+def start_server(tokens: list, address: str=None, port: str=None):
     if not isinstance(tokens, list):
         raise TypeError("Tokens must be a list.")
     if not all(isinstance(token, dict) for token in tokens):
         raise TypeError("Tokens must be a list of dictionaries.")
     app.state.tokens = tokens
-    CommandLineInterface().run(["poe_api_wrapper.openai.api:app", "--bind", f"{address}", "--port", f"{port}"])
+    host = address or os.getenv("HOST", "127.0.0.1")
+    port = port or os.getenv("PORT", "8091")
+    CommandLineInterface().run(["poe_api_wrapper.openai.api:app", "--bind", host, "--port", port])

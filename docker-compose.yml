@@ -1,0 +1,11 @@
+version: '3'
+services:
+  poe-api:
+    build: .
+    ports:
+      - "8091:8091"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8091
+    volumes:
+      - ./poe_api_wrapper/openai/secrets.json:/app/poe_api_wrapper/openai/secrets.json

@@ -7,6 +7,5 @@ dist/
 playground/
 examples/
 langchain/
-Dockerfile
 .aider*
 .env
