@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   poe-api:
     build: .
@@ -9,3 +9,11 @@ services:
       - PORT=8091
     volumes:
       - ./poe_api_wrapper/openai/secrets.json:/app/poe_api_wrapper/openai/secrets.json
+    networks:
+      - open-webui-network
+    container_name: poe-wrapper
+        
+networks:
+  open-webui-network:
+    external: true
+        
