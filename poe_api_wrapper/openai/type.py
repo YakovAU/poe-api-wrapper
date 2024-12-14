@@ -27,6 +27,19 @@ class ImagesEditData(BaseModel):
     n: Optional[int] = 1
     size: Optional[str] = '1024x1024'
 
+class VideosGenData(BaseModel):
+    prompt: Any
+    model: Any
+    n: Optional[int] = 1
+    duration: Optional[int] = 10
+
+class VideosEditData(BaseModel):
+    video: Any
+    prompt: Any
+    model: Any
+    n: Optional[int] = 1
+    duration: Optional[int] = 10
+
 
 # OpenAI typing
 class FunctionCall(BaseModel):
