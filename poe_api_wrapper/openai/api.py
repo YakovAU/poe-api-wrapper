@@ -350,6 +350,21 @@ async def generate_chunks(
         finish_reason = "stop"
         
         if not raw_tool_calls:
+            # Validate bot exists
+            bot_info = await client.get_botInfo(response["bot"])
+            if not bot_info:
+                raise HTTPException(
+                    detail={
+                        "error": {
+                            "message": f"Bot {response['bot']} not found or inaccessible",
+                            "type": "error",
+                            "param": None,
+                            "code": 404
+                        }
+                    },
+                    status_code=404
+                )
+                
             async for chunk in client.send_message(bot=response["bot"], message=response["message"], file_path=image_urls):
                 chunk_token = await helpers.__tokenize(chunk["text"])
                 
