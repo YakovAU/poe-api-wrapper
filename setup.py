@@ -15,7 +15,7 @@ setup(
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=long_description,
-    packages=find_packages(),
+    packages=find_packages(include=['poe_api_wrapper', 'poe_api_wrapper.*']),
     python_requires=">=3.7",
     install_requires=['httpx[http2]', 'websocket-client', 'requests_toolbelt', 'loguru', 'rich==13.3.4', 'beautifulsoup4', 'quickjs', 'nest-asyncio', 'orjson', 'aiofiles'],
     extras_require={
