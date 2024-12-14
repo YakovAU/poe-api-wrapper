@@ -15,11 +15,26 @@ app = FastAPI(title="Poe API Wrapper", description="OpenAI Proxy Server")
 
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
-with open(os.path.join(DIR, "secrets.json"), "rb") as f:
-    TOKENS = orjson.loads(f.read())
-    if "tokens" not in TOKENS:
-        raise Exception("Tokens not found in secrets.json")
-    app.state.tokens = TOKENS["tokens"]
+# Try environment variables first
+cf_bm = os.getenv("CF_BM")
+cf_clearance = os.getenv("CF_CLEARANCE") 
+formkey = os.getenv("FORMKEY")
+
+if cf_bm and cf_clearance and formkey:
+    app.state.tokens = [{
+        "p-b": "j6UklfFKrfbQGG81QEwwOw%3D%3",
+        "p-lat": "blh8bOM2oYiHUy%2FL5d%2BwMh%2BJJlTW46q74nNP6Sz4gA%3D%3D",
+        "__cf_bm": cf_bm,
+        "cf_clearance": cf_clearance,
+        "formkey": formkey
+    }]
+else:
+    # Fall back to secrets.json
+    with open(os.path.join(DIR, "secrets.json"), "rb") as f:
+        TOKENS = orjson.loads(f.read())
+        if "tokens" not in TOKENS:
+            raise Exception("Tokens not found in secrets.json")
+        app.state.tokens = TOKENS["tokens"]
 
 with open(os.path.join(DIR, "models.json"), "rb") as f:
     models = orjson.loads(f.read())
