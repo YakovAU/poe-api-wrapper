@@ -7,6 +7,9 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=8091
+      - CF_BM=${CF_BM:-}
+      - CF_CLEARANCE=${CF_CLEARANCE:-}
+      - FORMKEY=${FORMKEY:-}
     volumes:
       - ./poe_api_wrapper/openai/secrets.json:/app/poe_api_wrapper/openai/secrets.json
     networks:
