@@ -16,9 +16,7 @@ from .utils import (
                     )
 from .queries import generate_payload
 from .bundles import PoeBundle
-from .proxies import PROXY
-if PROXY:
-    from .proxies import fetch_proxy
+from .proxies import PROXY, get_proxy, mark_proxy_failed
 
 """
 This API is modified and maintained by @snowby666
@@ -96,20 +94,40 @@ class PoeApi:
         if proxy == [] and auto_proxy == True:
             if not PROXY:
                 raise ValueError("Please install ballyregan for auto proxy")
-            proxies = fetch_proxy()
+            self.proxies = get_proxy()
+            if not self.proxies:
+                raise ValueError("No working proxies available")
         elif proxy != [] and auto_proxy == False:
-            proxies = proxy
+            # Use provided proxy list
+            self.proxies = proxy[0] if isinstance(proxy, list) else proxy
         else:
             raise ValueError("Please provide a valid proxy list or set auto_proxy to False")
-        for p in range(len(proxies)):
+
+        max_retries = 3
+        retry_count = 0
+        
+        while retry_count < max_retries:
             try:
-                self.proxies = proxies[p]
-                self.client.proxies = self.proxies 
+                self.client.proxies = self.proxies
                 self.connect_ws()
-                logger.info(f"Connection established with {proxies[p]}")
+                logger.info(f"Connection established with proxy")
                 break
-            except:
-                logger.info(f"Connection failed with {proxies[p]}. Trying {p+1}/{len(proxies)} ...")
+            except Exception as e:
+                retry_count += 1
+                logger.warning(f"Connection failed with proxy. Attempt {retry_count}/{max_retries}")
+                
+                if auto_proxy:
+                    # Mark current proxy as failed and get a new one
+                    mark_proxy_failed(self.proxies)
+                    self.proxies = get_proxy()
+                    if not self.proxies:
+                        raise ValueError("No working proxies available")
+                elif len(proxy) > retry_count:
+                    # Try next proxy from provided list
+                    self.proxies = proxy[retry_count]
+                else:
+                    raise ValueError(f"All proxies failed: {str(e)}")
+                
                 sleep(1)
     
     def send_request(self, path: str, query_name: str="", variables: dict={}, file_form: list=[], knowledge: bool=False, ratelimit: int = 0):
@@ -117,73 +135,101 @@ class PoeApi:
             logger.warning(f"Waiting queue {ratelimit}/2 to avoid rate limit")
             sleep(random.randint(2, 3))
         status_code = 0
+        max_retries = 3
+        retry_count = 0
         
-        try:
-            payload = generate_payload(query_name, variables)
-            base_string = payload + self.formkey + "4LxgHM6KpFqokX0Ox"
-            if file_form == []:
-                headers = {'Content-Type': 'application/json'}
-            else:
-                fields = {'queryInfo': payload}
-                if not knowledge:
-                    for i in range(len(file_form)):
-                        fields[f'file{i}'] = file_form[i]
+        while retry_count < max_retries:
+            try:
+                payload = generate_payload(query_name, variables)
+                base_string = payload + self.formkey + "4LxgHM6KpFqokX0Ox"
+                if file_form == []:
+                    headers = {'Content-Type': 'application/json'}
                 else:
-                    fields['file'] = file_form[0]
-                payload = MultipartEncoder(
-                    fields=fields
-                    )
-                headers = {'Content-Type': payload.content_type}
-                payload = payload.to_string()
-            
-            headers.update({
-                "poe-tag-id": hashlib.md5(base_string.encode()).hexdigest(),
-            })
-            response = self.client.post(f'{self.BASE_URL}/api/{path}', data=payload, headers=headers, follow_redirects=True, timeout=30)
-            
-            status_code = response.status_code
-            json_data = orjson.loads(response.text)
-
-            if (
-                "success" in json_data.keys()
-                and not json_data["success"]
-                or (json_data and json_data["data"] is None)
-            ):
-                err_msg: str = json_data["errors"][0]["message"]
-                if err_msg == "Server Error":
-                    raise RuntimeError(f"Server Error. Raw response data: {json_data}")
-                else:
-                    logger.error(response.status_code)
-                    logger.error(response.text)
-                    raise Exception(response.text)
+                    fields = {'queryInfo': payload}
+                    if not knowledge:
+                        for i in range(len(file_form)):
+                            fields[f'file{i}'] = file_form[i]
+                    else:
+                        fields['file'] = file_form[0]
+                    payload = MultipartEncoder(
+                        fields=fields
+                        )
+                    headers = {'Content-Type': payload.content_type}
+                    payload = payload.to_string()
                 
-            if status_code == 200:
-                for file in file_form:
-                    try:
-                        if hasattr(file[1], 'closed') and not file[1].closed:
-                            file[1].close()
-                    except IOError as e:
-                        logger.warning(f"Failed to close file: {file[0]}. Reason: {e}")
-                return json_data
+                headers.update({
+                    "poe-tag-id": hashlib.md5(base_string.encode()).hexdigest(),
+                })
+                response = self.client.post(f'{self.BASE_URL}/api/{path}', data=payload, headers=headers, follow_redirects=True, timeout=30)
+                
+                status_code = response.status_code
+                json_data = orjson.loads(response.text)
+
+                if (
+                    "success" in json_data.keys()
+                    and not json_data["success"]
+                    or (json_data and json_data["data"] is None)
+                ):
+                    err_msg: str = json_data["errors"][0]["message"]
+                    if err_msg == "Server Error":
+                        raise RuntimeError(f"Server Error. Raw response data: {json_data}")
+                    elif "rate" in err_msg.lower() or status_code == 429:
+                        # Rate limit hit, rotate proxy if available
+                        if PROXY and self.proxies:
+                            mark_proxy_failed(self.proxies)
+                            new_proxy = get_proxy()
+                            if new_proxy:
+                                self.proxies = new_proxy
+                                self.client.proxies = new_proxy
+                                logger.info("Rotating to new proxy due to rate limit")
+                                retry_count += 1
+                                sleep(random.randint(1, 3))
+                                continue
+                    else:
+                        logger.error(response.status_code)
+                        logger.error(response.text)
+                        raise Exception(response.text)
+                    
+                if status_code == 200:
+                    for file in file_form:
+                        try:
+                            if hasattr(file[1], 'closed') and not file[1].closed:
+                                file[1].close()
+                        except IOError as e:
+                            logger.warning(f"Failed to close file: {file[0]}. Reason: {e}")
+                    return json_data
+                
+            except Exception as e:
+                if isinstance(e, ReadTimeout):
+                    if query_name == "SendMessageMutation":
+                        logger.error(f"Failed to send message {variables['query']} due to ReadTimeout")
+                        raise e
+                    else:
+                        logger.error(f"Automatic retrying request {query_name} due to ReadTimeout")
+                        retry_count += 1
+                        continue
+
+                if (isinstance(e, ConnectError) or 500 <= status_code < 600):
+                    if PROXY and self.proxies:
+                        mark_proxy_failed(self.proxies)
+                        new_proxy = get_proxy()
+                        if new_proxy:
+                            self.proxies = new_proxy
+                            self.client.proxies = new_proxy
+                            logger.info("Rotating to new proxy due to connection error")
+                            retry_count += 1
+                            sleep(random.randint(1, 3))
+                            continue
+
+                error_code = f"status_code:{status_code}, " if status_code else ""
+                raise Exception(
+                    f"Sending request {query_name} failed after {retry_count} retries. {error_code} Error log: {repr(e)}"
+                )
             
-        except Exception as e:
-            if isinstance(e, ReadTimeout):
-                if query_name == "SendMessageMutation":
-                    logger.error(f"Failed to send message {variables['query']} due to ReadTimeout")
-                    raise e
-                else:
-                    logger.error(f"Automatic retrying request {query_name} due to ReadTimeout")
-                    return self.send_request(path, query_name, variables, file_form)
+            retry_count += 1
+            sleep(random.randint(1, 3))
 
-            if (
-                isinstance(e, ConnectError) or 500 <= status_code < 600
-            ) and ratelimit < 2:
-                return self.send_request(path, query_name, variables, file_form, ratelimit=ratelimit + 1)
-
-            error_code = f"status_code:{status_code}, " if status_code else ""
-            raise Exception(
-                f"Sending request {query_name} failed. {error_code} Error log: {repr(e)}"
-            )
+        raise Exception(f"Max retries ({max_retries}) exceeded for request {query_name}")
     
     def get_channel_settings(self):
         response_json = orjson.loads(self.client.get(f'{self.BASE_URL}/api/settings', headers=self.HEADERS, follow_redirects=True, timeout=30).text)

@@ -16,14 +16,16 @@ app = FastAPI(title="Poe API Wrapper", description="OpenAI Proxy Server")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 # Try environment variables first
+p_b = os.getenv("P-B")
+p_lat = os.getenv("P-LAT")
 cf_bm = os.getenv("CF_BM")
-cf_clearance = os.getenv("CF_CLEARANCE") 
+cf_clearance = os.getenv("CF_CLEARANCE")
 formkey = os.getenv("FORMKEY")
 
 if cf_bm and cf_clearance and formkey:
     app.state.tokens = [{
-        "p-b": "j6UklfFKrfbQGG81QEwwOw%3D%3",
-        "p-lat": "blh8bOM2oYiHUy%2FL5d%2BwMh%2BJJlTW46q74nNP6Sz4gA%3D%3D",
+        "p-b": p-b,
+        "p-lat": p-lat,
         "__cf_bm": cf_bm,
         "cf_clearance": cf_clearance,
         "formkey": formkey

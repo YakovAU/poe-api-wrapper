@@ -15,6 +15,7 @@ services:
     networks:
       - open-webui-network
     container_name: poe-wrapper
+    restart: always
         
 networks:
   open-webui-network:

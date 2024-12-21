@@ -1,42 +1,6 @@
 {
-    "gpt-3.5-turbo": {
-        "baseModel": "gpt3_5",
-        "tokens": 2000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": false,
-        "object": "model",
-        "owned_by": "openai"
-    },
-
-    "gpt-3.5-turbo-instruct": {
-        "baseModel": "chinchilla_instruct",
-        "tokens": 2000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": false,
-        "object": "model",
-        "owned_by": "openai"
-    },
-
-    "gpt-3.5-turbo-16k": {
-        "baseModel": "agouti",
-        "tokens": 16000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": false,
-        "object": "model",
-        "owned_by": "openai"
-    },
-
-    "gpt-4": {
-        "baseModel": "gpt4_classic",
-        "tokens": 2000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": true,
-        "object": "model",
-        "owned_by": "openai"
-    },
-
     "gpt-4-turbo": {
-        "baseModel": "beaver",
+        "baseModel": "gpt-4-turbo",
         "tokens": 4000,
         "endpoints": ["/v1/chat/completions"],
         "premium_model": true,
@@ -45,7 +9,7 @@
     },
 
     "gpt-4-turbo-128k": {
-        "baseModel": "vizcacha",
+        "baseModel": "gpt-4-turbo-128k",
         "tokens": 128000,
         "endpoints": ["/v1/chat/completions"],
         "premium_model": true,
@@ -89,98 +53,8 @@
         "owned_by": "openai"
     },
 
-    "claude-instant": {
-        "baseModel": "a2",
-        "tokens": 9000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": false,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
-    "claude-instant-100k": {
-        "baseModel": "a2_100k",
-        "tokens": 100000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": false,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
-    "claude-2": {
-        "baseModel": "claude_2_short",
-        "tokens": 4000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": true,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
-    "claude-2-100k": {
-        "baseModel": "a2_2",
-        "tokens": 100000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": true,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
-    "claude-3-opus": {
-        "baseModel": "claude_2_1_cedar",
-        "tokens": 4000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": true,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
-    "claude-3-sonnet": {
-        "baseModel": "claude_2_1_bamboo",
-        "tokens": 4000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": false,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
-    "claude-3-haiku": {
-        "baseModel": "claude_3_haiku",
-        "tokens": 4000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": false,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
-    "claude-3-opus-200k": {
-        "baseModel": "claude_3_opus_200k",
-        "tokens": 200000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": true,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
-    "claude-3-sonnet-200k": {
-        "baseModel": "claude_3_sonnet_200k",
-        "tokens": 200000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": true,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
-    "claude-3-haiku-200k": {
-        "baseModel": "claude_3_haiku_200k",
-        "tokens": 200000,
-        "endpoints": ["/v1/chat/completions"],
-        "premium_model": false,
-        "object": "model",
-        "owned_by": "anthropic"
-    },
-
     "claude-3.5-sonnet": {
-        "baseModel": "claude_3_igloo",
+        "baseModel": "claude_3_5_sonnet",
         "tokens": 4000,
         "endpoints": ["/v1/chat/completions"],
         "premium_model": false,
@@ -189,7 +63,7 @@
     },
     
     "claude-3.5-sonnet-200k": {
-        "baseModel": "claude_3_igloo_200k",
+        "baseModel": "claude_3.5_sonnet_200k",
         "tokens": 200000,
         "endpoints": ["/v1/chat/completions"],
         "premium_model": false,
@@ -547,20 +421,6 @@
         "owned_by": "stabilityai"
     },
 
-    "dall-e-3": {
-        "baseModel": "dalle3",
-        "tokens": 80,
-        "endpoints": ["/v1/images/generations", "/v1/images/edits"],
-        "premium_model": true,
-        "object": "model",
-        "owned_by": "openai",
-        "sizes": {
-            "1024x1024": "--aspect 1:1",
-            "1792x1024": "--aspect 7:4",
-            "1024x1792": "--aspect 4:7"
-        }
-    },
-
     "ideogram": {
         "baseModel": "ideogram",
         "tokens": 80,
@@ -579,5 +439,795 @@
             "1295x809": "--aspect 16:10",
             "809x1295": "--aspect 10:16"
         }
+    },
+  "claude-3.5-haiku": {
+    "baseModel": "claude_3_5_haiku",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "anthropic"
+  },
+  "llama-3.3-70b": {
+    "baseModel": "llama_3_3_70b",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3.3-70b-fw": {
+    "baseModel": "llama_3_3_70b_fw",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "grok-beta": {
+    "baseModel": "grok_beta",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "xai"
+  },
+  "o1-mini": {
+    "baseModel": "o1_mini",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "openai"
+  },
+  "llama-3.1-405b": {
+    "baseModel": "llama_3_1_405b",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "gemini-2.0-flash": {
+    "baseModel": "gemini_2_0_flash",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "google"
+  },
+  "mistral-large-2": {
+    "baseModel": "mistral_large_2",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "mistralai"
+  },
+  "qwen-2.5-72b": {
+    "baseModel": "qwen_2_5_72b",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "alibaba"
+  },
+  "qwen-2.5-7b": {
+    "baseModel": "qwen_2_5_7b",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "alibaba"
+  },
+  "qwen2.5-coder-32b": {
+    "baseModel": "qwen_2_5_coder_32b",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "alibaba"
+  },
+  "llama-3.1-8b": {
+    "baseModel": "llama_3_1_8b",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3.1-70b": {
+    "baseModel": "llama_3_1_70b",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3.1-nemotron": {
+    "baseModel": "llama_3_1_nemotron",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "nvidia"
+  },
+  "f1-preview": {
+    "baseModel": "f1_preview",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fireworks"
+  },
+  "o1-preview": {
+    "baseModel": "o1_preview",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "openai"
+  },
+  "f1-mini-preview": {
+    "baseModel": "f1_mini_preview",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fireworks"
+  },
+  "solar-pro": {
+    "baseModel": "solar_pro",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "upstage"
+  },
+  "command-r": {
+    "baseModel": "command_r",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "anthropic"
+  },
+  "command-r-plus": {
+    "baseModel": "command_r_plus",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "anthropic"
+  },
+  "reka-core": {
+    "baseModel": "reka_core",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "reka"
+  },
+  "reka-flash": {
+    "baseModel": "reka_flash",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "reka"
+  },
+  "llama-3.2-11b": {
+    "baseModel": "llama_3_2_11b",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3.2-90b-fw-131k": {
+    "baseModel": "llama_3_2_90b_fw",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3.1-405b-base": {
+    "baseModel": "llama_3_1_405b_base",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3-70b-fp16": {
+    "baseModel": "llama_3_70b_fp16",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3.1-8b-fp16": {
+    "baseModel": "llama_3_1_8b_fp16",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3.1-70b-fp16": {
+    "baseModel": "llama_3_1_70b_fp16",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3.1-405b-fp16": {
+    "baseModel": "llama_3_1_405b_fp16",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "hermes-3-70b": {
+    "baseModel": "hermes_3_70b",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "nousresearch"
+  },
+  "gemma-2-27b-t": {
+    "baseModel": "gemma_2_27b_t",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "google"
+  },
+  "gemma-2-9b-t": {
+    "baseModel": "gemma_2_9b_t",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "google"
+  },
+  "mixtral8x22b-inst-fw": {
+    "baseModel": "mixtral_8x22b_inst_fw",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "mistralai"
+  },
+  "llama-3-70b-groq": {
+    "baseModel": "llama_3_70b_groq",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "llama-3-8b-groq": {
+    "baseModel": "llama_3_8b_groq",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta"
+  },
+  "qwq-32b-preview-t": {
+    "baseModel": "qwq_32b_preview_t",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "alibaba"
+  },
+  "qwen-qwq-32b-preview": {
+    "baseModel": "qwen_qwq_32b_preview",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "alibaba"
+  },
+  "mixtral-8x7b-chat": {
+    "baseModel": "mixtral_8x7b_chat",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "mistralai"
+  },
+  "qwen-1.5-110b-t": {
+    "baseModel": "qwen_1_5_110b_t",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "alibaba"
+  },
+  "qwen2-72b-instruct-t": {
+    "baseModel": "qwen2_72b_instruct_t",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "alibaba"
+  },
+  "qwen-72b-t": {
+    "baseModel": "qwen_72b_t",
+    "tokens": 128000,
+    "endpoints": ["/v1/chat/completions"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "alibaba"
+  },
+
+  "FLUX-pro-1.1-ultra": {
+    "baseModel": "FLUX-pro-1.1-ultra",
+    "tokens": 80,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fal",
+    "sizes": {
+      "1024x1024": "--aspect 1:1",
+      "1792x1024": "--aspect 16:9",
+      "1024x1792": "--aspect 9:16",
+      "1216x832": "--aspect 19:13",
+      "832x1216": "--aspect 13:19"
     }
+  },
+
+  "Hailuo-AI": {
+    "baseModel": "Hailuo-AI",
+    "tokens": 80,
+    "endpoints": ["/v1/videos/generations", "/v1/videos/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fal",
+    "sizes": {
+      "1024x1024": "--aspect 1:1",
+      "1792x1024": "--aspect 16:9",
+      "1024x1792": "--aspect 9:16",
+      "1216x832": "--aspect 19:13",
+      "832x1216": "--aspect 13:19"
+    }
+  },
+  "imagen3": {
+    "baseModel": "imagen3",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "google",
+    "sizes": {
+      "1024x1024": "--aspect-ratio 1:1",
+      "1792x1024": "--aspect-ratio 16:9",
+      "1024x1792": "--aspect-ratio 9:16",
+      "1365x1024": "--aspect-ratio 4:3",
+      "1024x1365": "--aspect-ratio 3:4"
+    }
+  },
+  "flux-pro-1.1": {
+    "baseModel": "flux_pro_1_1",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fireworks"
+  },
+  "playground-v3": {
+    "baseModel": "playground_v3",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "playgroundai",
+    "sizes": {
+      "1024x1024": "--aspect 1:1",
+      "1792x1024": "--aspect 16:9",
+      "1024x1792": "--aspect 9:16"
+    }
+  },
+  "imagen3-fast": {
+    "baseModel": "imagen3_fast",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "google"
+  },
+  "ideogram-v2": {
+    "baseModel": "ideogram_v2",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "ideogram",
+    "sizes": {
+      "1024x1024": "--aspect 1:1",
+      "1792x1024": "--aspect 16:9",
+      "1024x1792": "--aspect 9:16",
+      "1365x1024": "--aspect 4:3",
+      "1024x1365": "--aspect 3:4"
+    }
+  },
+  "stablediffusion3.5-l": {
+    "baseModel": "stablediffusion35_l",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "stabilityai"
+  },
+  "dall-e-3": {
+    "baseModel": "dalle3",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "openai",
+    "sizes": {
+      "1024x1024": "--aspect 1:1",
+      "1792x1024": "--aspect 7:4",
+      "1024x1792": "--aspect 4:7"
+    }
+  },
+  "flux-pro": {
+    "baseModel": "flux_pro",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fireworks"
+  },
+  "flux-schnell": {
+    "baseModel": "flux_schnell",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fireworks"
+  },
+  "flux-dev": {
+    "baseModel": "flux_dev",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fireworks"
+  },
+  "playground-upscaler": {
+    "baseModel": "playground_upscaler",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "playgroundai"
+  },
+  "stablediffusion3-2b": {
+    "baseModel": "stablediffusion3_2b",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "stabilityai"
+  },
+  "sd3-medium": {
+    "baseModel": "sd3_medium",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "stabilityai"
+  },
+  "recraft-v3": {
+    "baseModel": "recraft_v3",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "recraft",
+    "styles": [
+      "realistic_image",
+      "digital_illustration",
+      "vector_illustration",
+      "realistic_image/b_and_w",
+      "realistic_image/hard_flash",
+      "realistic_image/hdr",
+      "realistic_image/natural_light",
+      "realistic_image/studio_portrait",
+      "realistic_image/enterprise",
+      "realistic_image/motion_blur",
+      "digital_illustration/pixel_art",
+      "digital_illustration/hand_drawn",
+      "digital_illustration/grain",
+      "digital_illustration/infantile_sketch",
+      "digital_illustration/2d_art_poster",
+      "digital_illustration/handmade_3d",
+      "digital_illustration/hand_drawn_outline",
+      "digital_illustration/engraving_color",
+      "digital_illustration/2d_art_poster_2",
+      "vector_illustration/engraving",
+      "vector_illustration/line_art",
+      "vector_illustration/line_circuit",
+      "vector_illustration/linocut"
+    ]
+  },
+  "sd3-turbo": {
+    "baseModel": "sd3_turbo",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "stabilityai"
+  },
+  "flux-1-schnell-fw": {
+    "baseModel": "flux_1_schnell_fw",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fireworks"
+  },
+  "flux-1-dev-fw": {
+    "baseModel": "flux_1_dev_fw",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "fireworks"
+  },
+  "stablediffusion3.5-t": {
+    "baseModel": "stablediffusion35_t",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "stabilityai"
+  },
+  "sd3.5-large-turbo": {
+    "baseModel": "sd35_large_turbo",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "stabilityai"
+  },
+  "sd3.5-medium": {
+    "baseModel": "sd35_medium",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "stabilityai"
+  },
+  "sd3.5-large": {
+    "baseModel": "sd35_large",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations", "/v1/images/edits"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "stabilityai"
+  },
+  "luma-photon": {
+    "baseModel": "luma_photon",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "luma"
+  },
+  "luma-photon-flash": {
+    "baseModel": "luma_photon_flash",
+    "tokens": 128000,
+    "endpoints": ["/v1/images/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "luma"
+  },
+  "pika-1.5": {
+    "baseModel": "pika_1_5",
+    "tokens": 128000,
+    "endpoints": ["/v1/videos/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "pika",
+    "supported_formats": ["mp4"],
+    "max_duration": "60",
+    "resolutions": {
+      "1024x576": "--resolution 1024x576",
+      "576x1024": "--resolution 576x1024",
+      "768x768": "--resolution 768x768"
+    }
+  },
+  "zeroscope-v3": {
+    "baseModel": "zeroscope_v3",
+    "tokens": 128000,
+    "endpoints": ["/v1/videos/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "zeroscope",
+    "supported_formats": ["mp4"],
+    "max_duration": "120"
+  },
+  "zeroscope-v2-xl": {
+    "baseModel": "zeroscope_v2_xl",
+    "tokens": 128000,
+    "endpoints": ["/v1/videos/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "zeroscope",
+    "supported_formats": ["mp4"],
+    "max_duration": "60"
+  },
+  "pika-1.5-flash": {
+    "baseModel": "pika_1_5_flash",
+    "tokens": 128000,
+    "endpoints": ["/v1/videos/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "pika",
+    "supported_formats": ["mp4"],
+    "max_duration": "30"
+  },
+  "dream-machine-1.0": {
+    "baseModel": "dream_machine_1_0",
+    "tokens": 128000,
+    "endpoints": ["/v1/videos/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "lucidvr",
+    "supported_formats": ["mp4"],
+    "max_duration": "60"
+  },
+  "luma-1.0": {
+    "baseModel": "luma_1_0",
+    "tokens": 128000,
+    "endpoints": ["/v1/videos/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "luma",
+    "supported_formats": ["mp4"],
+    "max_duration": "120",
+    "resolutions": {
+      "1024x576": "--resolution 1024x576",
+      "576x1024": "--resolution 576x1024",
+      "768x768": "--resolution 768x768"
+    }
+  },
+  "luma-1.0-flash": {
+    "baseModel": "luma_1_0_flash",
+    "tokens": 128000,
+    "endpoints": ["/v1/videos/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "luma",
+    "supported_formats": ["mp4"],
+    "max_duration": "30"
+  },
+  "runway-gen2": {
+    "baseModel": "runway_gen2",
+    "tokens": 128000,
+    "endpoints": ["/v1/videos/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "runway",
+    "supported_formats": ["mp4"],
+    "max_duration": "60"
+  },
+  "runway-gen2-flash": {
+    "baseModel": "runway_gen2_flash",
+    "tokens": 128000,
+    "endpoints": ["/v1/videos/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "runway",
+    "supported_formats": ["mp4"],
+    "max_duration": "30"
+  },
+
+  "elevenlabs-v2": {
+    "baseModel": "elevenlabs_v2",
+    "tokens": 128000,
+    "endpoints": ["/v1/audio/speech", "/v1/audio/voices"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "elevenlabs",
+    "supported_formats": ["mp3", "wav", "ogg"],
+    "voice_options": {
+      "stability": "0-1",
+      "similarity_boost": "0-1",
+      "style": "0-1",
+      "speaker_boost": "true/false"
+    }
+  },
+  "cartesia-pro": {
+    "baseModel": "cartesia_pro",
+    "tokens": 128000,
+    "endpoints": ["/v1/audio/speech", "/v1/audio/voices"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "cartesia",
+    "supported_formats": ["mp3", "wav", "ogg"],
+    "voice_options": {
+      "emotion": ["neutral", "happy", "sad", "angry", "excited"],
+      "speed": "0.5-2.0",
+      "pitch": "-20-20"
+    }
+  },
+  "coqui-v2": {
+    "baseModel": "coqui_v2",
+    "tokens": 128000,
+    "endpoints": ["/v1/audio/speech"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "coqui",
+    "supported_formats": ["wav", "mp3"],
+    "voice_options": {
+      "speed": "0.5-2.0",
+      "tone": "-12-12"
+    }
+  },
+  "bark-v2": {
+    "baseModel": "bark_v2",
+    "tokens": 128000,
+    "endpoints": ["/v1/audio/speech"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "suno",
+    "supported_formats": ["wav", "mp3"],
+    "voice_options": {
+      "speaker_id": ["v2/en_speaker_1", "v2/en_speaker_2", "v2/en_speaker_3"],
+      "temperature": "0-1"
+    }
+  },
+  "whisper-v3": {
+    "baseModel": "whisper_v3",
+    "tokens": 128000,
+    "endpoints": ["/v1/audio/transcriptions", "/v1/audio/translations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "openai",
+    "supported_formats": ["mp3", "mp4", "mpeg", "mpga", "m4a", "wav", "webm"],
+    "languages": ["auto", "en", "zh", "de", "es", "ru", "ko", "fr", "ja", "pt", "tr", "pl", "ca", "nl", "ar", "sv", "it", "id", "hi", "fi", "vi", "he", "uk", "el", "ms", "cs", "ro", "da", "hu", "ta", "no", "th", "ur", "hr", "bg", "lt", "la", "mi", "ml", "jw", "bn", "fo", "fa", "fil", "tl"]
+  },
+  "audio-craft-2": {
+    "baseModel": "audio_craft_2",
+    "tokens": 128000,
+    "endpoints": ["/v1/audio/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta",
+    "supported_formats": ["wav", "mp3"],
+    "generation_options": {
+      "duration": "1-30",
+      "temperature": "0-1",
+      "top_k": "1-250",
+      "top_p": "0-1",
+      "classifier_free_guidance": "1-10"
+    }
+  },
+  "musicgen-pro": {
+    "baseModel": "musicgen_pro",
+    "tokens": 128000,
+    "endpoints": ["/v1/audio/generations"],
+    "premium_model": true,
+    "object": "model",
+    "owned_by": "meta",
+    "supported_formats": ["wav", "mp3"],
+    "generation_options": {
+      "duration": "1-120",
+      "temperature": "0-1",
+      "top_k": "1-250",
+      "top_p": "0-1"
+    }
+  }
 }
